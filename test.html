@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>User Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+    
+    .card {
+      width: 400px;
+      background-color: #fff;
+      margin: 0 auto;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    h2 {
+      text-align: center;
+    }
+    
+    .profile-picture {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      background-color: #ccc;
+      background-position: center;
+      background-size: cover;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .form-group input[type="text"],
+    .form-group input[type="password"],
+    .form-group select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    
+    .form-group input[type="file"] {
+      padding: 5px;
+    }
+    
+    .form-group button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="profile-picture" id="profilePicturePreview"></div>
+    <h2>Edit Profile</h2>
+    <form id="profileForm">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+      </div>
+      <div class="form-group">
+        <label for="profilePicture">Profile Picture:</label>
+        <input type="file" id="profilePicture" name="profilePicture" accept="image/*" onchange="previewProfilePicture(event)">
+      </div>
+      <div class="form-group">
+        <label for="academicStatus">Academic Status:</label>
+        <select id="academicStatus" name="academicStatus" required>
+          <option value="undergraduate">Undergraduate</option>
+          <option value="postgraduate">Post-graduate</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="researchArea">Research Area:</label>
+        <input type="text" id="researchArea" name="researchArea" required>
+      </div>
+      <div class="form-group">
+        <button type="submit">Save Changes</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function previewProfilePicture(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      const profilePicturePreview = document.getElementById('profilePicturePreview');
+
+      reader.onload = function (e) {
+        profilePicturePreview.style.backgroundImage = `url(${e.target.result})`;
+      }
+
+      reader.readAsDataURL(file);
+    }
+
+    const profileForm = document.getElementById('profileForm');
+    profileForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Retrieve form data
+      const formData = new FormData(profileForm);
+      const username = formData.get('username');
+      const password = formData.get('password');
+      const confirmPassword = formData.get('confirmPassword');
+      const academicStatus = formData.get('academicStatus');
+      const email = formData.get('email');
+      const researchArea = formData.get('researchArea');
+      const profilePicture = document.getElementById('profilePicture').files[0];
+
+      // Perform form validation and submit logic here
+      // ...
+
+      // Reset the form after submission if needed
+      // profileForm.reset();
+    });
+  </script>
+</body>
+
+</html>
