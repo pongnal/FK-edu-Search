@@ -87,10 +87,10 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Report</a>
+            <a class="nav-link active" aria-current="page" href="report.php">Report</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">KPI</a>
+            <a class="nav-link active" aria-current="page" href="graph.php">KPI</a>
           </li>
         </ul>
         <form class="d-flex" role="search">

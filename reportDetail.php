@@ -131,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Error updating status: " . $conn->error;
     }
 
-    echo '<script>window.location.href = "report2.php";</script>'; // Redirect to report2.php
+    echo '<script>window.location.href = "report.php";</script>'; // Redirect to report.php
     exit(); // Stop further execution after the updates}
 }
 
