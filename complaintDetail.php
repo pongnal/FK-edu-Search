@@ -51,53 +51,29 @@
             <a class="nav-link active" aria-current="page" href="complaint.php">Complaint</a>
           </li>
         </ul>
+
         <form class="d-flex" role="search" method="POST">
   <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
   <button class="btn btn-outline-success me-2" type="submit">Search</button>
   <button class="btn btn-outline-danger" type="submit" name="updateStatus">Log Out</button>
 </form>
-
-      </div>
-    </div>
   </nav>
   <br>
 
   <div class="centered-div">
-    <div style="display: flex; flex-direction: row;">
-
-      <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="d-flex">
-        <div class="form-group me-2">
-          <input type="text" name="get_ReportID" class="form-control" placeholder="Enter Report ID" required>
-        </div>
-        <button type="submit" name="search_by_id" class="btn btn-primary">Search</button>
-      </form>
-
-      <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="d-flex">
-        <div class="form-group">
-          <select name="sort_status" class="form-control" onchange="this.form.submit()" style="margin-left: 10px;">
-            <option value="">-- Select Status --</option>
-            <option value="Pending">Pending</option>
-            <option value="Resolved">Resolved</option>
-          </select>
-        </div>
-      </form>
-      
-    </div>
-    <br>
-
     <nav aria-label="breadcrumb" class="main-breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">Report List</li>
+        <li class="breadcrumb-item active" aria-current="page">Complaint Details</li>
       </ol>
     </nav>
-
     <table class="table align-middle mb-0 bg-white table table-hover">
       <thead class="table-dark">
         <tr>
-          <th>Report ID</th>
-          <th>Report Date</th>
-          <th>Status</th>
-          <th>Action</th>
+          <th>Complaint ID</th>
+          <th>Complaint Date</th>
+          <th>Complaint Type</th>
+          <th>Complaint Description</th>
+          <th>Complaint Status</th>
         </tr>
       </thead>
       <tbody>
@@ -109,71 +85,81 @@
         $dbname = "fk-edu-search";
 
         // Create a connection
-        $conn = new mysqli($servername, $username, $password, $dbname);
+        $conn = mysqli_connect($servername, $username, $password, $dbname);
+        $ComplaintID = $_GET['complaintID'];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+          $PostID = $_POST['complaintID'];
+          $updateStatusQuery = "UPDATE complaint SET complaintStatus = 'Resolved' WHERE complaintID = '$ComplaintID'";
+          if ($conn->query($updateStatusQuery)) {
+            echo "Status updated successfully.";
+            echo '<script>window.location.href = "complaint.php";</script>';
+            exit(); // Stop further execution after the update
+          } else {
+            echo "Error updating status: " . $conn->error;
+          }
+        }
 
         // Check the connection
         if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
         }
 
-        // Fetch user information from the database
-        if (isset($_POST['search_by_id'])) {
-          $reportID = $_POST['get_ReportID'];
-          $query = "SELECT * FROM report WHERE ReportID = '$reportID'";
-        } else {
-          $status = isset($_POST['sort_status']) ? $_POST['sort_status'] : '';
-
-          if ($status === "Resolved") {
-            $query = "SELECT * FROM report WHERE ReportStatus = 'Resolved' ";
-          } elseif ($status === "Pending") {
-            $query = "SELECT * FROM report WHERE ReportStatus = 'Pending' ";
-          } else {
-            $query = "SELECT * FROM report ORDER BY ReportDate DESC";
-          }
-        }
-
+        // Fetch complaint information from the database for the specified complaint ID
+        $query = "SELECT * FROM complaint WHERE complaintID = '$ComplaintID'";
         $result = $conn->query($query);
 
-        // Loop through the fetched user information and display it in the table rows
+        // Display the complaint data in the table row
         if ($result->num_rows > 0) {
           while ($row = $result->fetch_assoc()) {
-            $ReportID = $row["ReportID"];
-            $ReportDate = $row["ReportDate"];
-            $ReportStatus = $row["ReportStatus"];
+            $ComplaintID = $row["complaintID"];
+            $ComplaintDate = $row["complaintDate"];
+            $ComplaintType = $row["complaintType"];
+            $ComplaintDescription = $row["complaintDescription"];
+            $ComplaintStatus = $row["complaintStatus"];
             ?>
             <tr>
               <td>
-                <?php echo $ReportID; ?>
+                <?php echo $ComplaintID; ?>
               </td>
               <td>
-                <?php echo $ReportDate; ?>
+                <?php echo $ComplaintDate; ?>
               </td>
               <td>
-                <?php echo $ReportStatus; ?>
+                <?php echo $ComplaintType; ?>
               </td>
               <td>
-                <a class="btn btn-primary" href="reportDetail.php?date=<?php echo $ReportDate; ?>"
-                  class="btn btn-link btn-sm btn-rounded">View</a>
+                <?php echo $ComplaintDescription; ?>
+              </td>
+              <td>
+                <?php echo $ComplaintStatus; ?>
               </td>
             </tr>
             <?php
           }
         } else {
-          // If no reports are found in the database
           ?>
           <tr>
-            <td colspan="4">No reports found.</td>
+            <td colspan="6">No complaints found for the specified complaint ID.</td>
           </tr>
           <?php
         }
 
-        // Close the database connection
         $conn->close();
-
         ?>
+
       </tbody>
     </table>
+    <br>
+    <form method="POST">
+      <input type="hidden" name="complaintID" value="<?php echo $ComplaintID; ?>">
+      <a href="report.php" class="btn btn-primary">Back</a>
+      <button type="submit" name="updateStatus" class="btn btn-primary"
+        style="background-color: #90EE90; color: #000000;">Resolve</button>
+    </form>
   </div>
+
+
 </body>
 
 </html>

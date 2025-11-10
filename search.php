@@ -111,7 +111,7 @@
     <div class="form-group">
       <select name="sort_status" class="form-control" onchange="this.form.submit()">
         <option value="">-- Select Status --</option>
-        <option value="investigation">In Investigation</option>
+        <option value="investigation">Pending</option>
         <option value="resolved">Resolved</option>
       </select>
     </div>
@@ -185,9 +185,9 @@
             $sortStatus = $_POST['sort_status'];
 
             // Modify the query based on the selected status
-            if ($sortStatus === "investigation") {
-              $query = "SELECT * FROM report WHERE ReportStatus = 'In Investigation' ORDER BY ReportDate DESC";
-            } elseif ($sortStatus === "resolved") {
+            if ($sortStatus === "Pending") {
+              $query = "SELECT * FROM report WHERE ReportStatus = 'Pending' ORDER BY ReportDate DESC";
+            } elseif ($sortStatus === "Resolved") {
               $query = "SELECT * FROM report WHERE ReportStatus = 'Resolved' ORDER BY ReportDate DESC";
             } else {
               $query = "SELECT * FROM report ORDER BY ReportDate DESC";
